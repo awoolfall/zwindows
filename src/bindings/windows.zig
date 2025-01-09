@@ -151,6 +151,8 @@ pub extern "user32" fn GetKeyState(vKey: c_int) callconv(WINAPI) SHORT;
 
 pub extern "user32" fn LoadCursorA(hInstance: ?HINSTANCE, lpCursorName: LPCSTR) callconv(WINAPI) ?HCURSOR;
 
+pub extern "user32" fn ShowCursor(bShow: BOOL) callconv(WINAPI) INT;
+
 pub const TME_LEAVE = 0x00000002;
 
 pub const TRACKMOUSEEVENT = extern struct {
@@ -171,9 +173,54 @@ pub extern "user32" fn GetForegroundWindow() callconv(WINAPI) ?HWND;
 
 pub extern "user32" fn IsChild(hWndParent: ?HWND, hWnd: ?HWND) callconv(WINAPI) BOOL;
 
+pub extern "user32" fn SetCursorPos(X: INT, Y: INT) callconv(WINAPI) BOOL;
+
 pub extern "user32" fn GetCursorPos(point: *POINT) callconv(WINAPI) BOOL;
 
+pub extern "user32" fn ClipCursor(lpRect: ?*const RECT) callconv(WINAPI) BOOL;
+
 pub extern "user32" fn ScreenToClient(hWnd: ?HWND, lpPoint: *POINT) callconv(WINAPI) BOOL;
+
+pub extern "user32" fn EmptyClipboard() callconv(WINAPI) BOOL;
+
+pub extern "user32" fn OpenClipboard(hWndNewOwner: ?HWND) callconv(WINAPI) BOOL;
+
+pub extern "user32" fn CloseClipboard() callconv(WINAPI) BOOL;
+
+pub const CF_BITMAP = 2;
+pub const CF_DIB = 8;
+pub const CF_DIBV5 = 17;
+pub const CF_DIF = 5;
+pub const CF_DSPBITMAP = 0x0082;
+pub const CF_DSPENHMETAFILE = 0x008E;
+pub const CF_DSPMETAFILEPICT = 0x0083;
+pub const CF_DSPTEXT = 0x0081;
+pub const CF_ENHMETAFILE = 14;
+pub const CF_GDIOBJFIRST = 0x0300;
+pub const CF_GDIOBJLAST = 0x03FF;
+pub const CF_HDROP = 15;
+pub const CF_LOCALE = 16;
+pub const CF_METAFILEPICT = 3;
+pub const CF_OEMTEXT = 7;
+pub const CF_OWNERDISPLAY = 0x0080;
+pub const CF_PALETTE = 9;
+pub const CF_PENDATA = 10;
+pub const CF_PRIVATEFIRST = 0x0200;
+pub const CF_PRIVATELAST = 0x02FF;
+pub const CF_RIFF = 11;
+pub const CF_SYLK = 4;
+pub const CF_TEXT = 1;
+pub const CF_TIFF = 6;
+pub const CF_UNICODETEXT = 13;
+pub const CF_WAVE = 12;
+
+pub extern "user32" fn SetClipboardData(uFormat: UINT, hMem: HANDLE) callconv(WINAPI) ?HANDLE;
+
+pub extern "user32" fn GetClipboardData(uFormat: UINT) callconv(WINAPI) ?HANDLE;
+
+pub extern "user32" fn EnumClipboardFormats(format: UINT) callconv(WINAPI) UINT;
+
+pub extern "user32" fn IsClipboardFormatAvailable(format: UINT) callconv(WINAPI) BOOL;
 
 pub extern "user32" fn RegisterClassExA(*const WNDCLASSEXA) callconv(WINAPI) ATOM;
 
@@ -343,6 +390,24 @@ pub extern "kernel32" fn LeaveCriticalSection(lpCriticalSection: *CRITICAL_SECTI
 pub extern "kernel32" fn DeleteCriticalSection(lpCriticalSection: *CRITICAL_SECTION) callconv(WINAPI) void;
 
 pub extern "kernel32" fn Sleep(dwMilliseconds: DWORD) void;
+
+pub const HGLOBAL = HANDLE;
+
+pub const GHND = 0x0042;
+pub const GMEM_FIXED = 0x0000;
+pub const GMEM_MOVEABLE = 0x0002;
+pub const GMEM_ZEROINIT = 0x0040;
+pub const GPTR = 0x0040;
+
+pub extern "kernel32" fn GlobalAlloc(uFlags: UINT, dwBytes: SIZE_T) callconv(WINAPI) ?HGLOBAL;
+
+pub extern "kernel32" fn GlobalFree(hMem: HGLOBAL) callconv(WINAPI) ?HGLOBAL;
+
+pub extern "kernel32" fn GlobalLock(hMem: HGLOBAL) callconv(WINAPI) ?LPVOID;
+
+pub extern "kernel32" fn GlobalUnlock(hMem: HGLOBAL) callconv(WINAPI) BOOL;
+
+pub extern "kernel32" fn GlobalSize(hMem: HGLOBAL) callconv(WINAPI) SIZE_T;
 
 pub extern "ntdll" fn RtlGetVersion(lpVersionInformation: *OSVERSIONINFOW) callconv(WINAPI) NTSTATUS;
 

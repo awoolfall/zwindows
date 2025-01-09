@@ -35,12 +35,14 @@ pub const COMPILE_ALL_RESOURCES_BOUND: COMPILE_FLAG = (1 << 21);
 pub const COMPILE_DEBUG_NAME_FOR_SOURCE: COMPILE_FLAG = (1 << 22);
 pub const COMPILE_DEBUG_NAME_FOR_BINARY: COMPILE_FLAG = (1 << 23);
 
+pub const COMPILE_STANDARD_FILE_INCLUDE: ?*align(1) const d3dcommon.IInclude = @ptrFromInt(0x1);
+
 pub extern "D3DCompiler_47" fn D3DCompile(
     pSrcData: *const anyopaque,
     SrcDataSize: SIZE_T,
     pSourceName: ?LPCSTR,
     pDefines: ?*const d3dcommon.SHADER_MACRO,
-    pInclude: ?*const d3dcommon.IInclude,
+    pInclude: ?*align(1) const d3dcommon.IInclude,
     pEntrypoint: LPCSTR,
     pTarget: LPCSTR,
     Flags1: UINT,
