@@ -1096,7 +1096,7 @@ pub const IDeviceContext = extern struct {
                 self: *T,
                 StartSlot: UINT,
                 NumViews: UINT,
-                ppShaderResourceViews: [*]const *IShaderResourceView,
+                ppShaderResourceViews: [*]const ?*IShaderResourceView,
             ) void {
                 @as(*const IDeviceContext.VTable, @ptrCast(self.__v)).CSSetShaderResources(
                     @as(*IDeviceContext, @ptrCast(self)),
@@ -1109,8 +1109,8 @@ pub const IDeviceContext = extern struct {
                 self: *T,
                 StartSlot: UINT,
                 NumUAVs: UINT,
-                ppUnorderedAccessViews: [*]const *IUnorderedAccessView,
-                pUAVInitialCounts: [*]const UINT,
+                ppUnorderedAccessViews: [*]const ?*IUnorderedAccessView,
+                pUAVInitialCounts: ?[*]const UINT,
             ) void {
                 @as(*const IDeviceContext.VTable, @ptrCast(self.__v)).CSSetUnorderedAccessViews(
                     @as(*IDeviceContext, @ptrCast(self)),
@@ -1122,7 +1122,7 @@ pub const IDeviceContext = extern struct {
             }
             pub inline fn CSSetShader(
                 self: *T,
-                pComputeShader: *IComputeShader,
+                pComputeShader: ?*IComputeShader,
                 ppClassInstances: ?[*]const *IClassInstance,
                 NumClassInstances: UINT,
             ) void {
@@ -1137,7 +1137,7 @@ pub const IDeviceContext = extern struct {
                 self: *T,
                 StartSlot: UINT,
                 NumSamplers: UINT,
-                ppSamplers: ?[*]const *ISamplerState,
+                ppSamplers: ?[*]const ?*ISamplerState,
             ) void {
                 @as(*const IDeviceContext.VTable, @ptrCast(self.__v)).CSSetSamplers(
                     @as(*IDeviceContext, @ptrCast(self)),
@@ -1345,13 +1345,13 @@ pub const IDeviceContext = extern struct {
             *T,
             UINT,
             UINT,
-            ?[*]const *IShaderResourceView,
+            ?[*]const ?*IShaderResourceView,
         ) callconv(WINAPI) void,
         CSSetUnorderedAccessViews: *const fn (
             *T,
             UINT,
             UINT,
-            ?[*]const *IUnorderedAccessView,
+            ?[*]const ?*IUnorderedAccessView,
             ?[*]const UINT,
         ) callconv(WINAPI) void,
         CSSetShader: *const fn (
@@ -1364,7 +1364,7 @@ pub const IDeviceContext = extern struct {
             *T,
             UINT,
             UINT,
-            ?[*]const *ISamplerState,
+            ?[*]const ?*ISamplerState,
         ) callconv(WINAPI) void,
         CSSetConstantBuffers: *const fn (
             *T,
