@@ -1144,6 +1144,58 @@ pub const IDeviceContext = extern struct {
                     ppConstantBuffers,
                 );
             }
+            pub inline fn DSSetShaderResources(
+                self: *T,
+                StartSlot: UINT,
+                NumViews: UINT,
+                ppShaderResourceViews: ?[*]const ?*IShaderResourceView,
+            ) void {
+                @as(*const IDeviceContext.VTable, @ptrCast(self.__v)).DSSetShaderResources(
+                    @as(*IDeviceContext, @ptrCast(self)),
+                    StartSlot,
+                    NumViews,
+                    ppShaderResourceViews,
+                );
+            }
+            pub inline fn DSSetShader(
+                self: *T,
+                pDomainShader: ?*IDomainShader,
+                ppClassInstance: ?[*]const *IClassInstance,
+                NumClassInstances: UINT,
+            ) void {
+                @as(*const IDeviceContext.VTable, @ptrCast(self.__v)).DSSetShader(
+                    @as(*IDeviceContext, @ptrCast(self)),
+                    pDomainShader,
+                    ppClassInstance,
+                    NumClassInstances,
+                );
+            }
+            pub inline fn DSSetSamplers(
+                self: *T,
+                StartSlot: UINT,
+                NumSamplers: UINT,
+                ppSamplers: ?[*]const ?*ISamplerState,
+            ) void {
+                @as(*const IDeviceContext.VTable, @ptrCast(self.__v)).DSSetSamplers(
+                    @as(*IDeviceContext, @ptrCast(self)),
+                    StartSlot,
+                    NumSamplers,
+                    ppSamplers,
+                );
+            }
+            pub inline fn DSSetConstantBuffers(
+                self: *T,
+                StartSlot: UINT,
+                NumBuffers: UINT,
+                ppConstantBuffers: ?[*]const *IBuffer,
+            ) void {
+                @as(*const IDeviceContext.VTable, @ptrCast(self.__v)).DSSetConstantBuffers(
+                    @as(*IDeviceContext, @ptrCast(self)),
+                    StartSlot,
+                    NumBuffers,
+                    ppConstantBuffers,
+                );
+            }
             pub inline fn CSSetShaderResources(
                 self: *T,
                 StartSlot: UINT,
@@ -1409,10 +1461,30 @@ pub const IDeviceContext = extern struct {
             UINT, 
             ?[*]const *IBuffer,
         ) callconv(WINAPI) void,
-        DSSetShaderResources: *anyopaque,
-        DSSetShader: *anyopaque,
-        DSSetSamplers: *anyopaque,
-        DSSetConstantBuffers: *anyopaque,
+        DSSetShaderResources: *const fn (
+            *T, 
+            UINT, 
+            UINT, 
+            ?[*]const ?*IShaderResourceView,
+        ) callconv(WINAPI) void,
+        DSSetShader: *const fn (
+            *T, 
+            ?*IDomainShader, 
+            ?[*]const *IClassInstance, 
+            UINT,
+        ) callconv(WINAPI) void,
+        DSSetSamplers: *const fn (
+            *T, 
+            UINT, 
+            UINT, 
+            ?[*]const ?*ISamplerState,
+        ) callconv(WINAPI) void,
+        DSSetConstantBuffers: *const fn (
+            *T, 
+            UINT, 
+            UINT, 
+            ?[*]const *IBuffer,
+        ) callconv(WINAPI) void,
         CSSetShaderResources: *const fn (
             *T,
             UINT,
@@ -1679,6 +1751,21 @@ pub const IDevice = extern struct {
                     ppHullShader,
                 );
             }
+            pub inline fn CreateDomainShader(
+                self: *T,
+                pShaderBytecode: *const anyopaque,
+                BytecodeLength: SIZE_T,
+                pClassLinkage: ?*IClassLinkage,
+                ppDomainShader: ?*?*IDomainShader,
+            ) HRESULT {
+                return @as(*const IDevice.VTable, @ptrCast(self.__v)).CreateDomainShader(
+                    @as(*IDevice, @ptrCast(self)),
+                    pShaderBytecode,
+                    BytecodeLength,
+                    pClassLinkage,
+                    ppDomainShader,
+                );
+            }
             pub inline fn CreateComputeShader(
                 self: *T,
                 pShaderBytecode: *const anyopaque,
@@ -1810,7 +1897,13 @@ pub const IDevice = extern struct {
             ?*IClassLinkage,
             ?*?*IHullShader,
         ) callconv(WINAPI) HRESULT,
-        CreateDomainShader: *anyopaque,
+        CreateDomainShader: *const fn (
+            *T,
+            ?*const anyopaque,
+            SIZE_T,
+            ?*IClassLinkage,
+            ?*?*IDomainShader,
+        ) callconv(WINAPI) HRESULT,
         CreateComputeShader: *const fn (
             *T,
             ?*const anyopaque,
@@ -2023,6 +2116,23 @@ pub const IHullShader = extern struct {
     };
 };
 
+pub const IID_IDomainShader = GUID.parse("{f582c508-0f36-490c-9977-31eece268cfa}");
+pub const IDomainShader = extern struct {
+    __v: *const VTable,
+
+    pub usingnamespace Methods(@This());
+
+    pub fn Methods(comptime T: type) type {
+        return extern struct {
+            pub usingnamespace IDeviceChild.Methods(T);
+        };
+    }
+
+    pub const VTable = extern struct {
+        base: IDeviceChild.VTable,
+        GetDesc: *anyopaque,
+    };
+};
 
 pub const IID_IGeometryShader = GUID.parse("{38325b96-effb-4022-ba02-2e795b70275c}");
 pub const IGeometryShader = extern struct {
